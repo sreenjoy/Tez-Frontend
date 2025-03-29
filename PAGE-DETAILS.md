@@ -38,7 +38,7 @@ The application is built with:
 npm run dev
 ```
 
-The application runs on http://localhost:3003 by default. 
+The application runs on http://localhost:3000 by default. 
 
 ## Layout Structure
 
