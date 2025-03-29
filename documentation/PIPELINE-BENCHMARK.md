@@ -133,3 +133,4 @@
 - Table rows could benefit from virtualization
 - Search functionality triggers full re-render
 - Some hover effects cause layout shifts
+

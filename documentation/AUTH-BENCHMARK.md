@@ -78,3 +78,4 @@
 - Unnecessarily large bundle size
 - Duplicate styling in multiple components
 - No loading states for auth actions
+

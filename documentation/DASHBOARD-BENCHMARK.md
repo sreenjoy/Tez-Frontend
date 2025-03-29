@@ -108,3 +108,4 @@
 - Activity feed doesn't use virtualization
 - Some metrics calculations done client-side
 - Dashboard layout shifts during loading states
+
