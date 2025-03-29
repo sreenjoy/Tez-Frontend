@@ -4,15 +4,15 @@ the number # Tez.social - Pages & URLs
 
 | Page | URL | Description | Nickname |
 |------|-----|-------------|----------|
-| Sign In/Sign Up | [/auth](http://localhost:3003/auth) | Authentication page for user login and registration | A |
-| Organization Info | [/organization-info](http://localhost:3003/organization-info) | Collects organization details from first-time users | B |
+| Sign In/Sign Up | [/auth](http://localhost:3000/auth) | Authentication page for user login and registration | A |
+| Organization Info | [/organization-info](http://localhost:3000/organization-info) | Collects organization details from first-time users | B |
 
 ## Main Application
 
 | Page | URL | Description | Nickname |
 |------|-----|-------------|----------|
-| Pipeline | [/pipeline](http://localhost:3003/pipeline) | Sales pipeline with draggable deal cards | C |
-| Dashboard | [/dashboard](http://localhost:3003/dashboard) | Overview dashboard with analytics and metrics | D |
+| Pipeline | [/pipeline](http://localhost:3000/pipeline) | Sales pipeline with draggable deal cards | C |
+| Dashboard | [/dashboard](http://localhost:3000/dashboard) | Overview dashboard with analytics and metrics | D |
 
 ## Features
 
