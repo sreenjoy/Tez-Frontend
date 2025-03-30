@@ -1,0 +1,455 @@
+/* Pipeline page specific styles */
+
+/* Core styles */
+:root {
+  --border-color: #e5e7eb;
+  --hover-scale: 1.02;
+  --hover-transition: 150ms;
+}
+
+.dark {
+  --border-color: #374151;
+}
+
+/* Force company name styling */
+.pipeline-card .company-name {
+  margin-left: 4px !important;
+  color: #4f46e5 !important;
+}
+
+.dark .pipeline-card .company-name {
+  color: #818cf8 !important;
+}
+
+/* Column styles */
+.pipeline-column {
+  min-width: 300px;
+  max-width: 300px;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid transparent;
+  position: relative;
+  padding-right: 8px;
+}
+
+.pipeline-column:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background-color: rgba(229, 231, 235, 0.6);
+}
+
+.dark .pipeline-column:not(:last-child)::after {
+  background-color: rgba(75, 85, 99, 0.35);
+}
+
+.pipeline-column:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+}
+
+.pipeline-column-header {
+  transition: transform 0.2s ease;
+}
+
+.pipeline-column:hover .pipeline-column-header {
+  transform: translateY(-2px);
+}
+
+.column-counter {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 9999px;
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  margin-left: 0.5rem;
+}
+
+.dark .column-counter {
+  background-color: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+/* Card styles */
+.pipeline-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  user-select: none;
+  width: 100%;
+  height: 145px !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pipeline-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pipeline-card h3 {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.5rem;
+}
+
+.pipeline-card .flex-wrap {
+  max-height: 40px;
+  overflow: hidden;
+}
+
+.pipeline-card .inline-block {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  line-height: 1.25;
+}
+
+/* Custom scrollbar */
+.pipeline-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Standard scroll styling without vendor prefixes */
+.pipeline-scroll::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.pipeline-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark .pipeline-scroll::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.pipeline-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.pipeline-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Drag and drop styles */
+.pipeline-column [data-rbd-droppable-id] {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pipeline-column [data-rbd-placeholder-context-id] {
+  visibility: visible !important;
+  display: block !important;
+  min-height: 80px !important;
+  margin: 0 0 0.75rem 0 !important;
+  border-radius: 0.5rem !important;
+  border: 2px dashed #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.05) !important;
+  transition: all 0.2s ease !important;
+  opacity: 0.9 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.dark .pipeline-column [data-rbd-placeholder-context-id] {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  border: 2px dashed rgba(59, 130, 246, 0.6) !important;
+  box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Add Card Button Styles */
+.add-card-button {
+  height: 36px;
+  opacity: 0.7;
+  transform: translateY(0);
+  transition: all 0.2s ease;
+}
+
+.add-card-button:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.pipeline-column:hover .add-card-button {
+  opacity: 0.9;
+}
+
+.add-card-button svg {
+  transition: transform 0.2s ease;
+}
+
+.add-card-button:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Dragging styles */
+.dragging-cursor * {
+  cursor: grabbing !important;
+}
+
+.has-dnd [data-rbd-drag-handle-draggable-id] {
+  cursor: grab;
+}
+
+div[data-rbd-drag-handle-context-id] {
+  cursor: grab !important;
+}
+
+div[data-rbd-drag-handle-context-id]:active {
+  cursor: grabbing !important;
+}
+
+[data-rbd-drag-handle-draggable-id][data-rbd-dragging="true"] {
+  border: 2px solid #3b82f6 !important;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.2) !important;
+  transform: rotate(1deg) scale(1.02) !important;
+  opacity: 0.9 !important;
+  z-index: 999 !important;
+  pointer-events: auto !important;
+}
+
+/* Table styles */
+.dark table, .dark tr, .dark td, .dark th,
+table, tr, td, th {
+  border: none;
+  border-collapse: collapse;
+}
+
+table {
+  border-spacing: 0;
+}
+
+td, th {
+  border-top: none;
+  border-bottom: none;
+}
+
+/* Row hover effect */
+tr {
+  position: relative;
+  transition: transform var(--hover-transition) ease-out;
+}
+
+tr:hover td {
+  position: relative;
+  transition-duration: var(--hover-transition);
+  transform: scale(var(--hover-scale));
+  z-index: 10;
+}
+
+tr:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(243, 244, 246, 0.08);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.dark tr:hover::after {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Dark mode adjustments */
+.dark .sidebar-tooltip {
+  background: #1f2937;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Animation for column hover */
+.pipeline-column:hover .pipeline-column-header {
+  transform: translateY(-2px);
+}
+
+/* Tag styling */
+.pipeline-card .inline-block {
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  line-height: 1.25;
+}
+
+/* Status badge styling */
+.status-badge {
+  display: flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  color: #6b7280;
+}
+
+.dark .status-badge {
+  color: #9ca3af;
+}
+
+/* Contact avatar styling */
+.contact-avatar {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: linear-gradient(to right bottom, #8b5cf6, #6366f1);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+/* Tab counter badge */
+.tab-counter {
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 0.125rem 0.375rem;
+  border-radius: 9999px;
+  margin-left: 0.375rem;
+}
+
+/* Company badge styling */
+.company-badge {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #4f46e5;
+  margin-bottom: 0.25rem;
+}
+
+.dark .company-badge {
+  color: #818cf8;
+}
+
+/* Message counter badge */
+.message-counter {
+  font-size: 0.625rem;
+  padding: 0.0625rem 0.375rem;
+  border-radius: 9999px;
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.dark .message-counter {
+  background-color: rgba(37, 99, 235, 0.2);
+  color: #60a5fa;
+}
+
+/* Drag-and-drop special fixes for Next.js */
+.drag-source-column {
+  border: 2px dashed rgba(59, 130, 246, 0.4) !important;
+  transition: all 0.2s ease;
+  background-color: rgba(59, 130, 246, 0.05) !important;
+}
+
+/* Fix for Next.js strict mode rendering */
+[data-rbd-draggable-id] {
+  opacity: 1 !important;
+  z-index: auto !important;
+}
+
+/* Pulse animation for drop target */
+@keyframes pulse-drop-target {
+  0% {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  50% {
+    background-color: rgba(59, 130, 246, 0.2);
+  }
+  100% {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+}
+
+[data-is-dropping-over="true"] {
+  animation: pulse-drop-target 1s infinite;
+}
+
+/* Make sure all cards of standard height */
+.pipeline-column [data-rbd-droppable-id] [data-rbd-draggable-id] {
+  height: 145px !important;
+}
+
+/* Add styles for drag and drop improvements */
+/* Make all columns highlight during drag to indicate they are drop targets */
+.is-dragging [data-rbd-droppable-id] {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  min-height: 150px;
+  border: 2px dashed transparent;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+.is-dragging [data-rbd-droppable-id]:not([data-rbd-droppable-id="placeholder"]) {
+  background-color: rgba(59, 130, 246, 0.05) !important;
+  border: 2px dashed rgba(59, 130, 246, 0.2) !important;
+}
+
+.dark .is-dragging [data-rbd-droppable-id]:not([data-rbd-droppable-id="placeholder"]) {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border: 2px dashed rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Auto-scroll horizontally when dragging to edge of container */
+.pipeline-scroll {
+  scroll-behavior: smooth;
+}
+
+.is-dragging .pipeline-scroll {
+  scroll-behavior: auto;
+}
+
+/* Visual indicator that columns are drop targets */
+[data-rbd-droppable-id]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: 0.5rem;
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+  z-index: -1;
+}
+
+.is-dragging [data-rbd-droppable-id]:hover::after {
+  opacity: 0.5;
+}
+
+/* Make non-dragged cards more visible during drag */
+.is-dragging .pipeline-card:not([data-rbd-dragging="true"]) {
+  opacity: 0.7;
+}
+
+/* Ensure the placeholder follows the card size */
+[data-rbd-placeholder-context-id] {
+  min-height: 145px !important;
+  margin-bottom: 12px !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Ensure the droppable area has equal spacing */
+.pipeline-column > div > div {
+  /* Remove the padding rules we added earlier */
+}
+
+/* MODIFIED: Remove only the second !important border rules but keep functionality */
+/* Allow table row dividers to work */
+tbody.divide-y > tr {
+  border-bottom-width: 1px;
+} 
