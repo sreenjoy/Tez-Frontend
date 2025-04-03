@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import ThemeToggle from '../ThemeToggle'
+import { createContext } from 'react'
 
 // SVG Icons as components
 const DashboardIcon = ({ className = "w-5 h-5" }) => (
@@ -64,6 +65,15 @@ const AnalyticsIcon = ({ className = "w-5 h-5" }) => (
   </svg>
 )
 
+const AIAssistantIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 16v-4" />
+    <path d="M8 9h8" />
+    <path d="M12 6h.01" />
+  </svg>
+)
+
 const LogoutIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -81,6 +91,13 @@ const ChevronLeftIcon = ({ className = "w-5 h-5" }) => (
 const ChevronRightIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="m9 18 6-6-6-6" />
+  </svg>
+)
+
+// Add ChevronDownIcon for dropdown
+const ChevronDownIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 )
 
@@ -127,6 +144,13 @@ const navigationItems = [
     stats: '2 tasks due today'
   },
   { 
+    name: 'AI Assistant', 
+    icon: AIAssistantIcon, 
+    href: '/ai-assistant',
+    description: 'Train your AI assistant',
+    stats: 'Improve response quality'
+  },
+  { 
     name: 'Team', 
     icon: TeamIcon, 
     href: '/team',
@@ -163,6 +187,12 @@ const LogoIcon = ({ className = "w-6 h-6", style = {} }) => (
   </svg>
 );
 
+// Create a PipelineContext for sharing the selected pipeline across components
+export const PipelineContext = createContext({
+  selectedPipeline: "All Pipelines",
+  setSelectedPipeline: (pipeline: string) => {}
+});
+
 interface AppLayoutProps {
   children: React.ReactNode;
   companyName?: string;
@@ -181,109 +211,183 @@ export default function AppLayout({
   headerActionComponent = null
 }: AppLayoutProps) {
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+  const [pipelineDropdownOpen, setPipelineDropdownOpen] = useState(false);
+  const [selectedPipeline, setSelectedPipeline] = useState("All Pipelines");
   const pathname = usePathname();
 
+  // Mock pipeline data - in a real app, this would come from an API/context
+  const pipelines = [
+    { id: "all", name: "All Pipelines" },
+    { id: "sales", name: "Sales Pipeline" },
+    { id: "marketing", name: "Marketing Pipeline" },
+    { id: "support", name: "Support Pipeline" }
+  ];
+
+  // Toggle the pipeline dropdown
+  const togglePipelineDropdown = (e) => {
+    e.stopPropagation();
+    setPipelineDropdownOpen(!pipelineDropdownOpen);
+  };
+
+  // Select a pipeline and close the dropdown
+  const selectPipeline = (pipeline) => {
+    setSelectedPipeline(pipeline.name);
+    setPipelineDropdownOpen(false);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (pipelineDropdownOpen) {
+        setPipelineDropdownOpen(false);
+      }
+    };
+
+    // Add event listener when dropdown is open
+    if (pipelineDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [pipelineDropdownOpen]);
+
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-[#131823] text-gray-900 dark:text-gray-100">
-      {/* Sidebar - always collapsed */}
-      <div className="h-full bg-white dark:bg-[#1B2333] shadow-lg flex flex-col w-16">
-        {/* Logo section */}
-        <div className="pt-[0.83rem] px-3 mb-0">
-          <Link
-            href="/"
-            className="relative flex items-center justify-center p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <div className="w-6 h-6 flex items-center justify-center">
-              <LogoIcon className="w-6 h-6" />
+    <PipelineContext.Provider value={{ selectedPipeline, setSelectedPipeline: (p) => setSelectedPipeline(p) }}>
+      <div className="flex h-screen bg-gray-50 dark:bg-[#131823] text-gray-900 dark:text-gray-100">
+        {/* Sidebar - always collapsed */}
+        <div className="h-full bg-white dark:bg-[#1B2333] shadow-lg flex flex-col w-16">
+          {/* Logo section */}
+          <div className="pt-[0.83rem] px-3 mb-0">
+            <Link
+              href="/"
+              className="relative flex items-center justify-center p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                <LogoIcon className="w-6 h-6" />
+              </div>
+            </Link>
+          </div>
+
+          <div className="border-b border-gray-100 dark:border-[#1f293a] dark:border-opacity-20 mt-[0.86rem] mb-3"></div>
+
+          {/* Navigation links */}
+          <nav className="pt-2 pb-4 flex-1">
+            <ul className="space-y-1 px-2">
+              {navigationItems.map((item, index) => (
+                <li key={index}>
+                  <Link 
+                    href={item.href}
+                    className={`relative flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 ${
+                      pathname === item.href ? 'bg-slate-100 dark:bg-slate-800' : ''
+                    }`}
+                    onMouseEnter={() => setHoveredItem(index)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    <item.icon className="w-6 h-6" />
+                    <Tooltip 
+                      text={item.name} 
+                      stats={item.stats}
+                      visible={hoveredItem === index}
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* User profile */}
+          <div className="px-2 mb-1">
+            <div className="flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
+              {/* User avatar */}
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm">
+                U
+              </div>
+              <Tooltip 
+                text="Profile" 
+                stats={null}
+                visible={hoveredItem === -1}
+              />
             </div>
-          </Link>
-        </div>
+          </div>
 
-        <div className="border-b border-gray-100 dark:border-[#1f293a] dark:border-opacity-20 mt-[0.86rem] mb-3"></div>
-
-        {/* Navigation links */}
-        <nav className="pt-2 pb-4 flex-1">
-          <ul className="space-y-1 px-2">
-            {navigationItems.map((item, index) => (
-              <li key={index}>
-                <Link 
-                  href={item.href}
-                  className={`relative flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 ${
-                    pathname === item.href ? 'bg-slate-100 dark:bg-slate-800' : ''
-                  }`}
-                  onMouseEnter={() => setHoveredItem(index)}
-                  onMouseLeave={() => setHoveredItem(null)}
-                >
-                  <item.icon className="w-6 h-6" />
-                  <Tooltip 
-                    text={item.name} 
-                    stats={item.stats}
-                    visible={hoveredItem === index}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        {/* User profile */}
-        <div className="px-2 mb-1">
-          <div className="flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800">
-            {/* User avatar */}
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm">
-              U
+          {/* Logout button */}
+          <div className="px-2 mb-4">
+            <div 
+              className="flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+              onMouseEnter={() => setHoveredItem(-2)}
+              onMouseLeave={() => setHoveredItem(null)}
+            >
+              <LogoutIcon className="w-6 h-6" />
+              <Tooltip 
+                text="Log out" 
+                stats={null}
+                visible={hoveredItem === -2}
+              />
             </div>
-            <Tooltip 
-              text="Profile" 
-              stats={null}
-              visible={hoveredItem === -1}
-            />
           </div>
         </div>
 
-        {/* Logout button */}
-        <div className="px-2 mb-4">
-          <div 
-            className="flex items-center justify-center p-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
-            onMouseEnter={() => setHoveredItem(-2)}
-            onMouseLeave={() => setHoveredItem(null)}
-          >
-            <LogoutIcon className="w-6 h-6" />
-            <Tooltip 
-              text="Log out" 
-              stats={null}
-              visible={hoveredItem === -2}
-            />
-          </div>
+        {/* Main content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Top header */}
+          <header className="bg-white dark:bg-[#1B2333] shadow-sm border-b border-gray-100 dark:border-[#1f293a] dark:border-opacity-20 py-[0.86rem] px-4 flex items-center">
+            {headerTitle || (
+              <div className="flex items-center">
+                {/* Pipeline dropdown - always visible */}
+                <div className="relative">
+                  <button 
+                    className="flex items-center px-3 py-1 text-sm font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-800 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+                    onClick={togglePipelineDropdown}
+                  >
+                    {selectedPipeline}
+                    <ChevronDownIcon className="ml-1 w-4 h-4" />
+                  </button>
+                  
+                  {pipelineDropdownOpen && (
+                    <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700">
+                      <ul className="py-1">
+                        {pipelines.map((pipeline) => (
+                          <li key={pipeline.id}>
+                            <button
+                              className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                                selectedPipeline === pipeline.name 
+                                  ? 'bg-gray-100 dark:bg-gray-700 text-blue-600 dark:text-blue-400' 
+                                  : 'text-gray-900 dark:text-white'
+                              }`}
+                              onClick={() => selectPipeline(pipeline)}
+                            >
+                              {pipeline.name}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* This is where the Deal Value and Days in Stage will go */}
+            <div className="flex-1 flex items-center justify-end">
+              {headerSearchComponent}
+            </div>
+            
+            {/* Action components */}
+            <div className="flex items-center space-x-4 ml-4">
+              {headerActionComponent}
+              <ThemeToggle />
+            </div>
+          </header>
+
+          {/* Page content */}
+          <main className="flex-1 overflow-x-auto overflow-y-auto">
+            {children}
+          </main>
         </div>
       </div>
-
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top header */}
-        <header className="bg-white dark:bg-[#1B2333] shadow-sm border-b border-gray-100 dark:border-[#1f293a] dark:border-opacity-20 py-[0.86rem] px-4 flex items-center">
-          {headerTitle || (
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-              {navigationItems.find(item => item.href === pathname)?.name || 'Dashboard'}
-            </h1>
-          )}
-          
-          {/* Search and action components */}
-          <div className="flex items-center ml-4 flex-1 justify-end space-x-4">
-            {headerSearchComponent}
-            {headerActionComponent}
-          </div>
-          
-          <div className="flex items-center space-x-4 ml-4">
-            <ThemeToggle />
-          </div>
-        </header>
-
-        {/* Page content */}
-        <main className="flex-1 overflow-x-auto overflow-y-auto">
-          {children}
-        </main>
-      </div>
-    </div>
+    </PipelineContext.Provider>
   )
 } 
