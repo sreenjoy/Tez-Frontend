@@ -13,6 +13,13 @@
 # production
 /build
 
+# Exclude package-lock to allow for fresh installs
+# package-lock.json
+
+# Include .next/static for optimized assets that can be shared
+!.next/static
+!.next/standalone
+
 # misc
 .DS_Store
 *.pem
