@@ -1,59 +1,115 @@
-# Pipeline Page
+# Pipeline Page Documentation
 
 ## Overview
 
-The Pipeline page provides a visual interface for managing sales deals through different stages of the sales process. It features draggable cards that can be moved between columns, representing different stages in the pipeline.
+The Pipeline page is a critical component of the Tez Frontend, providing a kanban-style view for managing deals through various stages of the sales process. This interface allows users to visualize their sales pipeline, organize deals by stage, and efficiently track progress toward closing.
 
-## Features
+## Key Components
 
-### Deal Management
-- Draggable deal cards for easy status updates
-- Visual representation of deals by pipeline stage
-- Quick access to deal details
-- Deal filtering and sorting
+### Pipeline Header
 
-### Interface Controls
-- Collapsible sidebar for maximizing workspace
-- Responsive layout that adapts to screen size
-- Dark/Light mode support
+The header section contains essential navigation and filtering tools:
 
-## Components
+- **Pipeline Selector**: Dropdown menu to switch between different pipeline configurations (e.g., Main Pipeline, Enterprise Deals, Small Business)
+- **View Toggle**: Switch between Kanban view (default) and List view for different visualization options
+- **Filter Controls**: UI elements to filter deals by various criteria including:
+  - Priority (High, Medium, Low)
+  - Deal Owner
+  - Value Range
+  - Last Updated Time
+- **Search Bar**: Real-time search functionality to quickly find specific deals
+- **Add Deal Button**: Button to create a new deal directly from the pipeline view
 
-### Full Pipeline View
-![Full Pipeline](/documentation/screenshots/pipeline/pipeline-full.png)
+### Pipeline Columns
 
-The main pipeline view shows all deals organized by their current stage, with drag-and-drop functionality for moving deals through the pipeline.
+The main pipeline view consists of multiple columns representing sales stages, such as:
 
-### Collapsible Sidebar
-![Sidebar Collapsed](/documentation/screenshots/pipeline/pipeline-sidebar-collapsed.png)
+1. **Lead**: Initial contact or prospect identification
+2. **Qualified**: Prospects that match your ideal customer profile
+3. **Meeting Scheduled**: Deals with upcoming meetings or calls
+4. **Proposal Sent**: Deals where a proposal or quote has been sent
+5. **Negotiation**: Active price or terms negotiations
+6. **Closed Won**: Successfully closed deals
+7. **Closed Lost**: Deals that didn't convert
 
-The sidebar can be collapsed to provide more screen space for the pipeline view, particularly useful on smaller screens.
+Each column displays:
+- Stage name
+- Count of deals in that stage
+- Total value of deals in that stage
+- Color-coded indicators for stage performance
 
-### Deal Card Dragging
-![Card Dragging](/documentation/screenshots/pipeline/pipeline-card-dragging.png)
+### Deal Cards
 
-Deal cards can be dragged between pipeline stages to update their status with a simple drag-and-drop interaction.
+Individual deal cards appear within pipeline columns and contain:
 
-### Header
-![Header](/documentation/screenshots/pipeline/pipeline-header-1.png)
+- **Deal Name**: The name or title of the deal
+- **Company**: Associated company or organization
+- **Value**: Monetary value of the deal
+- **Priority Indicator**: Visual indicator (High/Medium/Low)
+- **Owner**: Team member responsible for the deal
+- **Last Activity**: Timestamp of most recent activity
+- **Deal Age**: Time since deal creation
+- **Progress Indicator**: Visual representation of deal progress
 
-The application header provides navigation controls and quick access to common functions.
+Deal cards support drag-and-drop functionality, allowing users to move deals between stages by dragging them to the appropriate column.
 
-### Main Content Area
-![Main Content](/documentation/screenshots/pipeline/pipeline-main-content-1.png)
+### Edit Pipeline Modal
 
-The main content area displays the pipeline columns and deal cards in an organized, visual layout.
+An admin modal interface for customizing the pipeline, including:
 
-## Interactions
+- **Pipeline Name Editing**: Change the name of the current pipeline
+- **Stage Management**: Add, remove, or reorder pipeline stages
+- **Stage Color Customization**: Assign colors to different stages
+- **Stage Properties**: Configure properties like probability percentages
+- **Archive/Delete Options**: Controls for archiving or deleting pipelines
 
-- Drag-and-drop deals between pipeline stages
-- Collapse/expand sidebar for different workspace views
-- Filter and sort deals based on various criteria
-- Access detailed information for each deal
+## Usage Guide
+
+1. **Pipeline Navigation**:
+   - Use the dropdown to switch between different pipelines
+   - Toggle between Kanban and List views based on your preference
+   - Use filters to focus on specific deal segments
+
+2. **Deal Management**:
+   - Create new deals using the "Add Deal" button
+   - Move deals through stages by dragging and dropping cards
+   - Click on a deal card to view or edit detailed information
+
+3. **Pipeline Customization**:
+   - Edit pipeline stages via the "Edit Pipeline" button
+   - Customize stage names, colors, and order to match your sales process
+   - Add new stages as your process evolves
+
+4. **Performance Analysis**:
+   - Monitor deals per stage to identify bottlenecks
+   - Track stage transition times to optimize your sales cycle
+   - Use column totals to assess projected revenue by stage
+
+5. **Team Collaboration**:
+   - Easily view which team member owns each deal
+   - Monitor recent activities to stay informed of progress
+   - Use the pipeline as a visual aid during team meetings
 
 ## Technical Implementation
 
-- Built with Next.js 14
-- Drag-and-drop functionality using @hello-pangea/dnd
-- Responsive design with Tailwind CSS
-- Dynamic theming with next-themes 
+The Pipeline page leverages several key technologies:
+
+- **React Beautiful DND** (@hello-pangea/dnd): For smooth drag-and-drop functionality between columns
+- **Context API**: To manage and share pipeline state across components
+- **Tailwind CSS**: For responsive and consistent styling across devices
+- **Custom Hooks**: For optimized state management and API interactions
+
+The page communicates with backend services to:
+- Fetch pipeline configurations and deal data
+- Update deal stages when cards are moved
+- Create new deals and modify existing ones
+- Apply filters and search criteria to the displayed deals
+
+## Best Practices
+
+- Regularly update deal stages to maintain accurate pipeline visibility
+- Use filters to focus on specific segments when managing large numbers of deals
+- Review pipeline analytics to identify bottlenecks in your sales process
+- Customize pipeline stages to match your organization's specific sales methodology
+- Train team members on consistent use of the pipeline to ensure data integrity
+- Conduct regular pipeline reviews to keep data clean and actionable 
