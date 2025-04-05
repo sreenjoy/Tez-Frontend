@@ -7,7 +7,11 @@
     "build": "next build --no-lint",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "docs": "./generate-docs.sh",
+    "docs:fix-css": "node fix-critters.js",
+    "docs:generate": "node generate-full-documentation.js",
+    "docs:screenshots": "node capture-all-pages.js"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
