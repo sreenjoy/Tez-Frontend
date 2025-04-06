@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# Git post-merge hook to check for version updates from feature repositories
+# This hook is called after a successful merge or pull operation
+#
+# To install this hook manually:
+# cp .github/hooks/post-merge .git/hooks/post-merge
+# chmod +x .git/hooks/post-merge
+
+# ANSI color codes
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+echo "${YELLOW}Checking for feature repository version updates...${NC}"
+
+# Path to the integration-report.md file (created by integration script)
+REPORT_FILE="integration-report.md"
+
+# Check if the integration report exists
+if [ -f "$REPORT_FILE" ]; then
+  UPDATED_FEATURES=$(grep -A 1 "### " "$REPORT_FILE" | grep -v "###" | grep "Repository:" | wc -l)
+  
+  if [ "$UPDATED_FEATURES" -gt 0 ]; then
+    echo "${GREEN}Found $UPDATED_FEATURES updated features in the integration report.${NC}"
+    echo "${YELLOW}Running integration compatibility tests...${NC}"
+    
+    # Run the compatibility tests
+    npm run test:compatibility
+    
+    # Check if the tests passed
+    if [ $? -eq 0 ]; then
+      echo "${GREEN}Compatibility tests passed. Building application...${NC}"
+      npm run build
+    else
+      echo "${RED}⚠️ Compatibility tests failed. Please review before proceeding.${NC}"
+      echo "${YELLOW}You can run 'npm run test:compatibility:verbose' for more details.${NC}"
+    fi
+  else
+    echo "${GREEN}No feature updates found in the integration report.${NC}"
+  fi
+else
+  echo "${YELLOW}No integration report found. Skipping compatibility tests.${NC}"
+fi
+
+# Check if any package.json dependencies were updated
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep "package.json" > /dev/null; then
+  echo "${YELLOW}Package.json was updated. Installing dependencies...${NC}"
+  npm install
+fi
+
+# Detect version changes
+VERSION_CHANGES=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep "version.js\$")
+if [ -n "$VERSION_CHANGES" ]; then
+  echo "${YELLOW}Version file was updated. Syncing version to package.json...${NC}"
+  
+  if [ -f "version.js" ]; then
+    # Extract version from version.js
+    VERSION=$(grep "version:" "version.js" | cut -d "'" -f 2 | cut -d "'" -f 1)
+    
+    if [ -n "$VERSION" ]; then
+      # Update version in package.json
+      npm version $VERSION --no-git-tag-version
+      echo "${GREEN}Updated package.json version to $VERSION${NC}"
+    else
+      echo "${RED}Could not extract version from version.js${NC}"
+    fi
+  fi
+fi
+
+echo "${GREEN}Post-merge hook completed.${NC}" 

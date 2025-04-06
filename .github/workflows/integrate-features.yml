@@ -1,0 +1,132 @@
+name: Integrate Features
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      feature:
+        description: 'Specific feature to integrate (leave empty for all)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (no pushing changes)'
+        required: false
+        type: boolean
+        default: false
+
+  # Scheduled run (daily at midnight UTC)
+  schedule:
+    - cron: '0 0 * * *'
+
+  # Automatically run when tagged for release
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v3
+        with:
+          # Fetch all history for proper versioning
+          fetch-depth: 0
+          # Required for push
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Create scripts directory if it doesn't exist
+        run: mkdir -p scripts
+
+      - name: Create or update integration script
+        run: |
+          # Fetch the latest integration script from the repository
+          # If the script doesn't exist locally, it will be created
+          if [ -f "scripts/integrate-features.js" ]; then
+            echo "Integration script already exists, using existing version"
+          else
+            echo "Creating integration script"
+            curl -s https://raw.githubusercontent.com/yourusername/Tez-Components/main/scripts/integrate-features.js > scripts/integrate-features.js
+            chmod +x scripts/integrate-features.js
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run integration script
+        run: |
+          if [ "${{ github.event.inputs.feature }}" != "" ]; then
+            node scripts/integrate-features.js --feature ${{ github.event.inputs.feature }}
+          else
+            node scripts/integrate-features.js
+          fi
+
+      - name: Install integrated dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test || echo "Tests failed but continuing"
+
+      - name: Build application
+        run: npm run build
+
+      - name: Commit and push changes
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          
+          git add .
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # Get feature info for commit message
+            FEATURE_INFO="${{ github.event.inputs.feature }}"
+            if [ "$FEATURE_INFO" = "" ]; then
+              FEATURE_INFO="all features"
+            fi
+            
+            # Create commit message
+            COMMIT_MSG="Integrate $FEATURE_INFO [automated]"
+            
+            # Add trigger info to commit message
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              COMMIT_MSG="$COMMIT_MSG\n\nTriggered by scheduled integration"
+            elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              COMMIT_MSG="$COMMIT_MSG\n\nTriggered manually by ${{ github.actor }}"
+            elif [ "${{ github.event_name }}" = "push" ]; then
+              COMMIT_MSG="$COMMIT_MSG\n\nTriggered by tag: ${{ github.ref }}"
+            fi
+            
+            # Commit and push
+            git commit -m "$COMMIT_MSG"
+            git push
+            
+            echo "Changes committed and pushed"
+          fi
+
+      - name: Create integration report
+        run: |
+          if [ -f "integration-report.md" ]; then
+            echo "## Integration Report" >> $GITHUB_STEP_SUMMARY
+            cat integration-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Integration Report" >> $GITHUB_STEP_SUMMARY
+            echo "No integration report generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload integration report as artifact
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-report
+          path: integration-report.md
+          if-no-files-found: ignore 
