@@ -863,7 +863,7 @@ export default function PipelinePage() {
       >
         <span>Sync Chats</span>
       </button>
-    
+      
       {/* Team members */}
       <div className="flex items-center ml-4">
         <div className="flex -space-x-2 overflow-hidden">
@@ -907,616 +907,616 @@ export default function PipelinePage() {
 
   return (
     <div>
-      <AppLayout
-        headerTitle={pipelineHeaderDropdown}
-        headerSearchComponent={searchComponent}
-        headerActionComponent={actionComponent}
-      >
-        <div className={`flex flex-col h-full ${isDragging ? 'dragging-cursor' : ''}`}>
-          {/* Top header with tabs */}
-          <div className="border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center px-4 pt-1.5 pb-1.5">
-              {/* Main tabs */}
-              <div className="flex space-x-1 overflow-x-auto flex-1">
-                {mainTabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap ${
+    <AppLayout
+      headerTitle={pipelineHeaderDropdown}
+      headerSearchComponent={searchComponent}
+      headerActionComponent={actionComponent}
+    >
+      <div className={`flex flex-col h-full ${isDragging ? 'dragging-cursor' : ''}`}>
+        {/* Top header with tabs */}
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center px-4 pt-1.5 pb-1.5">
+            {/* Main tabs */}
+            <div className="flex space-x-1 overflow-x-auto flex-1">
+              {mainTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap ${
+                    activeTab === tab.id && !selectedPriority && !selectedActivity
+                      ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'
+                  }`}
+                >
+                  {tab.icon && <tab.icon className="w-4 h-4 mr-1.5" />}
+                  {tab.name}
+                  {tab.count && (
+                    <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
                       activeTab === tab.id && !selectedPriority && !selectedActivity
-                        ? 'border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'
-                    }`}
-                  >
-                    {tab.icon && <tab.icon className="w-4 h-4 mr-1.5" />}
-                    {tab.name}
-                    {tab.count && (
-                      <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
-                        activeTab === tab.id && !selectedPriority && !selectedActivity
-                          ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300' 
-                          : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
-                      }`}>
-                        {tab.count}
-                      </span>
-                    )}
-                  </button>
-                ))}
-                
-                {/* Self-contained Priority dropdown */}
-                <PriorityDropdown 
-                  selectedPriority={selectedPriority}
-                  onSelectPriority={handlePrioritySelect}
-                />
-              </div>
+                        ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300' 
+                        : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              ))}
+              
+              {/* Self-contained Priority dropdown */}
+              <PriorityDropdown 
+                selectedPriority={selectedPriority}
+                onSelectPriority={handlePrioritySelect}
+              />
+            </div>
 
-              {/* Right side tabs */}
-              <div className="flex items-center ml-auto">
-                {/* First the mentions tab */}
-                <button 
-                  key="mentions"
-                  className="px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
-                  onClick={() => console.log("Clicked mentions")}
-                >
-                  <AtMentionIcon className="w-4 h-4 mr-1.5" />
-                  mentions
-                  <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-                    3
-                  </span>
-                </button>
-                
-                {/* Activity dropdown as a separate component */}
-                <ActivityDropdown 
-                  activityItems={activityItems}
-                  selectedActivity={selectedActivity}
-                  onSelectActivity={handleActivitySelect}
-                />
-                
-                {/* Finally the Filter button */}
-                <button 
-                  key="filter"
-                  className="px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
-                  onClick={() => console.log("Clicked Filter")}
-                >
-                  <FilterIcon className="w-4 h-4 mr-1.5" />
-                  Filter
-                </button>
-              </div>
+            {/* Right side tabs */}
+            <div className="flex items-center ml-auto">
+              {/* First the mentions tab */}
+              <button 
+                key="mentions"
+                className="px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
+                onClick={() => console.log("Clicked mentions")}
+              >
+                <AtMentionIcon className="w-4 h-4 mr-1.5" />
+                mentions
+                <span className="ml-1.5 px-1.5 py-0.5 rounded-full text-xs bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                  3
+                </span>
+              </button>
+              
+              {/* Activity dropdown as a separate component */}
+              <ActivityDropdown 
+                activityItems={activityItems}
+                selectedActivity={selectedActivity}
+                onSelectActivity={handleActivitySelect}
+              />
+              
+              {/* Finally the Filter button */}
+              <button 
+                key="filter"
+                className="px-4 py-2 text-sm rounded-t-md flex items-center whitespace-nowrap text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300"
+                onClick={() => console.log("Clicked Filter")}
+              >
+                <FilterIcon className="w-4 h-4 mr-1.5" />
+                Filter
+              </button>
             </div>
           </div>
+        </div>
 
-          {/* Pipeline content with drag and drop or list view based on viewMode */}
-          {viewMode === 'kanban' ? (
-            <div className="flex-1 overflow-x-auto overflow-y-auto p-2.5 pipeline-scroll">
-              <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-                <div className="flex gap-2">
-                  {columnOrder.map(columnId => {
-                    const column = columns[columnId];
-                    
-                    return (
-                      <div key={column.id} className="pipeline-column min-w-[300px] w-[300px] bg-gray-50 dark:bg-gray-900/30 rounded-lg">
-                        <div className="px-2">
-                          <div className="pipeline-column-header flex items-center mb-4 justify-between">
-                            <div className="flex items-center">
-                              <div className={`w-3 h-3 rounded-full mr-2 ${getColorClass(column.color)}`}></div>
-                              <h2 className="font-semibold">{column.title}</h2>
-                              <span className="column-counter">{column.count}</span>
-                            </div>
-                            <button className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-full">
-                              <DotsIcon className="w-4 h-4" />
-                            </button>
-                          </div>
-                          
-                          <Droppable 
-                            droppableId={column.id}
-                            type="PIPELINE-CARD"
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                                className={`min-h-[150px] rounded-lg transition-all duration-200 ${
-                                  snapshot.isDraggingOver 
-                                    ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-200 dark:border-blue-800' 
-                                    : draggedItemId ? 'bg-gray-50 dark:bg-gray-900/10 border-2 border-dashed border-gray-200 dark:border-gray-800' : ''
-                                }`}
-                              >
-                                {column.cards.map((card, index) => (
-                                  <Draggable key={card.id} draggableId={card.id} index={index}>
-                                    {(provided, snapshot) => (
-                                      <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        id={`card-${card.id}`}
-                                        onClick={() => handleCardClick(card.id)}
-                                        className={`pipeline-card mb-3 bg-white dark:bg-gray-800 rounded-lg p-3 border h-[145px] flex flex-col justify-between ${
-                                          snapshot.isDragging
-                                            ? 'border-blue-400 dark:border-blue-500 shadow-lg'
-                                            : 'border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md'
-                                        } cursor-pointer`}
-                                      >
-                                        {/* Group logo and name */}
-                                        <div className="flex items-center mb-2 px-0.5">
-                                          <GroupLogo name={card.company} />
-                                          <div 
-                                            className="company-name ml-2 text-[14px] font-medium text-indigo-600 dark:text-indigo-400 truncate" 
-                                            style={{marginLeft: '4px !important', color: 'rgb(79, 70, 229) !important'}}
-                                          >
-                                            {card.company}
-                                          </div>
-                                        </div>
-
-                                        {/* Tags - limited to 2 with "..." */}
-                                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-0.5">
-                                          {card.tags.length > 0 ? (
-                                            <div className="flex flex-wrap gap-1">
-                                              {card.tags.slice(0, 2).map((tag, i) => {
-                                                let bgColor = 'bg-gray-100 dark:bg-gray-700';
-                                                let textColor = 'text-gray-600 dark:text-gray-300';
-                                                let borderColor = 'border border-gray-200 dark:border-gray-600';
-                                                
-                                                if (tag === 'Wifey material') {
-                                                  bgColor = 'bg-green-50 dark:bg-green-900/30';
-                                                  textColor = 'text-green-700 dark:text-green-300';
-                                                  borderColor = 'border border-green-200 dark:border-green-800';
-                                                } else if (tag === 'ENOC') {
-                                                  bgColor = 'bg-orange-50 dark:bg-orange-900/30';
-                                                  textColor = 'text-orange-700 dark:text-orange-300';
-                                                  borderColor = 'border border-orange-200 dark:border-orange-800';
-                                                } else if (tag === 'From conference') {
-                                                  bgColor = 'bg-blue-50 dark:bg-blue-900/30';
-                                                  textColor = 'text-blue-700 dark:text-blue-300';
-                                                  borderColor = 'border border-blue-200 dark:border-blue-800';
-                                                } else if (tag === 'No money') {
-                                                  bgColor = 'bg-red-50 dark:bg-red-900/30';
-                                                  textColor = 'text-red-700 dark:text-red-300';
-                                                  borderColor = 'border border-red-200 dark:border-red-800';
-                                                } else if (tag === 'Crypto') {
-                                                  bgColor = 'bg-purple-50 dark:bg-purple-900/30';
-                                                  textColor = 'text-purple-700 dark:text-purple-300';
-                                                  borderColor = 'border border-purple-200 dark:border-purple-800';
-                                                }
-                                                
-                                                return (
-                                                  <span key={i} className={`inline-block ${bgColor} ${textColor} ${borderColor} rounded-full px-2 py-0.5 text-[10px] mr-1`}>
-                                                    {tag}
-                                                  </span>
-                                                );
-                                              })}
-                                              {card.tags.length > 2 && (
-                                                <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-full px-2 py-0.5 text-[10px]">
-                                                  ...
-                                                </span>
-                                              )}
-                                            </div>
-                                          ) : (
-                                            'No tags'
-                                          )}
-                                        </div>
-
-                                        {/* Group owner */}
-                                        <div className="flex items-center mb-2 px-0.5">
-                                          <div className="flex items-center text-xs">
-                                            <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white text-[10px] mr-1.5 flex-shrink-0">
-                                              {card.contact ? card.contact.charAt(0) : '?'}
-                                            </div>
-                                            <span className="text-gray-700 dark:text-gray-300 truncate max-w-[160px] text-xs">
-                                              {card.contact}
-                                            </span>
-                                          </div>
-                                          
-                                          {/* Priority indicator */}
-                                          <div className="ml-auto">
-                                            <span className={`text-[10px] py-0.5 px-1.5 rounded-full ${
-                                              card.id.includes('1') || card.id.includes('5') ? 
-                                                'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 
-                                              card.id.includes('3') || card.id.includes('6') ? 
-                                                'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' : 
-                                                'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                                            }`}>
-                                              {card.id.includes('1') || card.id.includes('5') ? 'High' : 
-                                               card.id.includes('3') || card.id.includes('6') ? 'Medium' : 'Low'}
-                                            </span>
-                                          </div>
-                                        </div>
-                                        
-                                        {/* Divider */}
-                                        <div className="border-t border-gray-100 dark:border-gray-700 my-1"></div>
-                                        
-                                        {/* Tasks status */}
-                                        <div className="flex items-center justify-between text-xs px-0.5 mt-1 mb-1">
-                                          <div className="flex items-center text-gray-600 dark:text-gray-400">
-                                            {card.status ? (
-                                              <>
-                                                {card.status === 'Invoice paid' ? (
-                                                  <CheckIcon className="w-3 h-3 mr-1 text-green-500" />
-                                                ) : card.status === 'Invoice sent' ? (
-                                                  <MessageIcon className="w-3 h-3 mr-1 text-blue-500" />
-                                                ) : card.status === 'Offline meeting' ? (
-                                                  <TeamIcon className="w-3 h-3 mr-1 text-purple-500" />
-                                                ) : null}
-                                                <span className="text-[11px]">{card.status}</span>
-                                              </>
-                                            ) : (
-                                              <span className="text-green-600 dark:text-green-400 text-[11px]">No tasks pending</span>
-                                            )}
-                                          </div>
-                                          
-                                          {card.messages > 0 ? (
-                                            <span className={`text-[10px] flex items-center justify-center w-5 h-5 ${
-                                              card.id.includes('1') || card.id.includes('5') 
-                                                ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' // Hot
-                                                : card.id.includes('3') || card.id.includes('4')  
-                                                  ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200' // Warm
-                                                  : card.id.includes('6')
-                                                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' // Cold
-                                                    : 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200' // Dormant
-                                            } rounded-full flex-shrink-0 relative group`}>
-                                              {card.messages}
-                                              <div className="absolute bottom-full right-0 mb-2 w-32 bg-gray-900 text-white text-xs rounded-md py-1 px-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
-                                                {card.id.includes('1') || card.id.includes('5') 
-                                                  ? 'Hot Lead' 
-                                                  : card.id.includes('3') || card.id.includes('4')
-                                                    ? 'Warm Lead'
-                                                    : card.id.includes('6')
-                                                      ? 'Cold Lead'
-                                                      : 'Dormant Lead'
-                                                }
-                                              </div>
-                                            </span>
-                                          ) : (
-                                            <div className={`w-2 h-2 rounded-full flex-shrink-0 relative group ${
-                                              card.id.includes('1') || card.id.includes('5') 
-                                                ? 'bg-red-500' // Hot
-                                                : card.id.includes('3') || card.id.includes('4')  
-                                                  ? 'bg-orange-500' // Warm
-                                                  : card.id.includes('6')
-                                                    ? 'bg-blue-500' // Cold
-                                                    : 'bg-gray-500' // Dormant
-                                            }`}>
-                                              <div className="absolute bottom-full right-0 mb-2 w-32 bg-gray-900 text-white text-xs rounded-md py-1 px-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
-                                                {card.id.includes('1') || card.id.includes('5') 
-                                                  ? 'Hot Lead' 
-                                                  : card.id.includes('3') || card.id.includes('4')
-                                                    ? 'Warm Lead'
-                                                    : card.id.includes('6')
-                                                      ? 'Cold Lead'
-                                                      : 'Dormant Lead'
-                                                }
-                                              </div>
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                ))}
-                                {provided.placeholder}
-                                <button className="add-card-button w-full h-[40px] p-2 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all hover:border-blue-300 dark:hover:border-blue-700 hover:text-blue-600 dark:hover:text-blue-400 flex items-center justify-center mt-2">
-                                  <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                  </svg>
-                                  Add Deal
-                                </button>
-                              </div>
-                            )}
-                          </Droppable>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </DragDropContext>
-            </div>
-          ) : (
-            <div className="flex-1 pl-[1px] pt-[1px]">
-              <table className="min-w-full flex-1 border-collapse bg-white dark:bg-gray-800 h-full w-full rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm border-l-4 border-l-blue-500 dark:border-l-blue-600">
-                <thead className="bg-gray-50 dark:bg-gray-900">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Deal
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Stage
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Owner
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Priority
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Value
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white dark:bg-gray-800">
-                  {columnOrder.flatMap((columnId, columnIndex, columnsArray) => 
-                    columns[columnId].cards.map((card, rowIndex, rowsArray) => {
-                      // Calculate if this is the last row in the entire table
-                      const isLastColumn = columnIndex === columnOrder.length - 1;
-                      const isLastRowInColumn = rowIndex === columns[columnId].cards.length - 1;
-                      const isLastRowInTable = isLastColumn && isLastRowInColumn;
-                      
-                      return (
-                        <tr 
-                          key={card.id} 
-                          onClick={() => handleCardClick(card.id)} 
-                          className="hover:bg-gray-50 dark:hover:bg-gray-300/[0.025] cursor-pointer relative"
-                          style={{
-                            borderBottom: !isLastRowInTable ? '1px solid var(--border-color, #e5e7eb)' : 'none'
-                          }}
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex flex-col space-y-2">
-                              <div className="flex items-center">
-                                <GroupLogo name={card.company} />
-                                <div className="ml-2 text-sm font-medium text-gray-900 dark:text-white">{card.company}</div>
-                              </div>
-                              <div className="flex flex-wrap">
-                                {card.tags.slice(0, 2).map((tag, i) => {
-                                  let bgColor = 'bg-gray-100 dark:bg-gray-700';
-                                  let textColor = 'text-gray-600 dark:text-gray-300';
-                                  let borderColor = 'border border-gray-200 dark:border-gray-600';
-                                  
-                                  if (tag === 'Wifey material') {
-                                    bgColor = 'bg-green-50 dark:bg-green-900/30';
-                                    textColor = 'text-green-700 dark:text-green-300';
-                                    borderColor = 'border border-green-200 dark:border-green-800';
-                                  } else if (tag === 'ENOC') {
-                                    bgColor = 'bg-orange-50 dark:bg-orange-900/30';
-                                    textColor = 'text-orange-700 dark:text-orange-300';
-                                    borderColor = 'border border-orange-200 dark:border-orange-800';
-                                  } else if (tag === 'From conference') {
-                                    bgColor = 'bg-blue-50 dark:bg-blue-900/30';
-                                    textColor = 'text-blue-700 dark:text-blue-300';
-                                    borderColor = 'border border-blue-200 dark:border-blue-800';
-                                  } else if (tag === 'No money') {
-                                    bgColor = 'bg-red-50 dark:bg-red-900/30';
-                                    textColor = 'text-red-700 dark:text-red-300';
-                                    borderColor = 'border border-red-200 dark:border-red-800';
-                                  } else if (tag === 'Crypto') {
-                                    bgColor = 'bg-purple-50 dark:bg-purple-900/30';
-                                    textColor = 'text-purple-700 dark:text-purple-300';
-                                    borderColor = 'border border-purple-200 dark:border-purple-800';
-                                  }
-                                  
-                                  return (
-                                    <span key={i} className={`inline-block ${bgColor} ${textColor} ${borderColor} rounded-full px-2 py-0.5 text-[10px] mr-1`}>
-                                      {tag}
-                                    </span>
-                                  );
-                                })}
-                                {card.tags.length > 2 && (
-                                  <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-full px-2 py-0.5 text-[10px]">
-                                    +{card.tags.length - 2}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className={`w-3 h-3 rounded-full mr-2 ${getColorClass(columns[columnId].color)}`}></div>
-                              <span className="text-sm text-gray-900 dark:text-white">{columns[columnId].title}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white text-xs mr-2">
-                                {card.contact.charAt(0)}
-                              </div>
-                              <span className="text-sm text-gray-900 dark:text-white">{card.contact}</span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex text-xs px-2 py-1 rounded-full ${
-                              card.id.includes('1') || card.id.includes('5') ? 
-                                'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 
-                              card.id.includes('3') || card.id.includes('6') ? 
-                                'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' : 
-                                'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                            }`}>
-                              {card.id.includes('1') || card.id.includes('5') ? 'High' : 
-                               card.id.includes('3') || card.id.includes('6') ? 'Medium' : 'Low'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                            ${card.value.toLocaleString()}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              {card.status ? (
-                                <span className="text-sm text-gray-700 dark:text-gray-300">{card.status}</span>
-                              ) : (
-                                <span className="text-sm text-green-600 dark:text-green-400">No tasks pending</span>
-                              )}
-                              <div className="ml-2">
-                                {card.messages > 0 ? (
-                                  <span className={`text-[10px] flex items-center justify-center w-5 h-5 ${
-                                    card.id.includes('1') || card.id.includes('5') 
-                                      ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' // Hot
-                                      : card.id.includes('3') || card.id.includes('4')  
-                                        ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200' // Warm
-                                        : card.id.includes('6')
-                                          ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' // Cold
-                                          : 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200' // Dormant
-                                  } rounded-full flex-shrink-0 relative group`}>
-                                    {card.messages}
-                                  </span>
-                                ) : (
-                                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                                    card.id.includes('1') || card.id.includes('5') 
-                                      ? 'bg-red-500' // Hot
-                                      : card.id.includes('3') || card.id.includes('4')  
-                                        ? 'bg-orange-500' // Warm
-                                        : card.id.includes('6')
-                                          ? 'bg-blue-500' // Cold
-                                          : 'bg-gray-500' // Dormant
-                                  }`}></div>
-                                )}
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-
-          {/* Pipeline Editor Modal */}
-          {showPipelineEditor && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-              <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl shadow-xl">
-                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Pipeline</h2>
-                  <button 
-                    onClick={handleCloseEditor}
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                
-                <div className="p-4">
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Pipeline Name
-                    </label>
-                    <input
-                      type="text"
-                      value={editingPipelineName}
-                      onChange={handlePipelineNameChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                    />
-                  </div>
+        {/* Pipeline content with drag and drop or list view based on viewMode */}
+        {viewMode === 'kanban' ? (
+          <div className="flex-1 overflow-x-auto overflow-y-auto p-2.5 pipeline-scroll">
+            <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+              <div className="flex gap-2">
+                {columnOrder.map(columnId => {
+                  const column = columns[columnId];
                   
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Pipeline Stages
-                    </label>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                      Add up to 10 stages in your pipeline
-                    </p>
-                    
-                    <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
-                      <div className="bg-gray-50 dark:bg-gray-900 px-4 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">
-                        Stages
-                      </div>
-                      
-                      <DragDropContext onDragEnd={handleStageReorder}>
-                        <Droppable droppableId="stages" type="STAGE">
-                          {(provided) => (
+                  return (
+                    <div key={column.id} className="pipeline-column min-w-[300px] w-[300px] bg-gray-50 dark:bg-gray-900/30 rounded-lg">
+                      <div className="px-2">
+                        <div className="pipeline-column-header flex items-center mb-4 justify-between">
+                          <div className="flex items-center">
+                            <div className={`w-3 h-3 rounded-full mr-2 ${getColorClass(column.color)}`}></div>
+                            <h2 className="font-semibold">{column.title}</h2>
+                            <span className="column-counter">{column.count}</span>
+                          </div>
+                          <button className="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 rounded-full">
+                            <DotsIcon className="w-4 h-4" />
+                          </button>
+                        </div>
+                        
+                        <Droppable 
+                          droppableId={column.id}
+                          type="PIPELINE-CARD"
+                        >
+                          {(provided, snapshot) => (
                             <div
-                              ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className="divide-y divide-gray-200 dark:divide-gray-700"
+                              ref={provided.innerRef}
+                              className={`min-h-[150px] rounded-lg transition-all duration-200 ${
+                                snapshot.isDraggingOver 
+                                  ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-dashed border-blue-200 dark:border-blue-800' 
+                                  : draggedItemId ? 'bg-gray-50 dark:bg-gray-900/10 border-2 border-dashed border-gray-200 dark:border-gray-800' : ''
+                              }`}
                             >
-                              {editingStages.map((stage, index) => (
-                                <Draggable key={stage.id} draggableId={stage.id} index={index}>
-                                  {(provided) => (
+                              {column.cards.map((card, index) => (
+                                <Draggable key={card.id} draggableId={card.id} index={index}>
+                                  {(provided, snapshot) => (
                                     <div
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
-                                      className="flex items-center px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750"
+                                      {...provided.dragHandleProps}
+                                      id={`card-${card.id}`}
+                                      onClick={() => handleCardClick(card.id)}
+                                      className={`pipeline-card mb-3 bg-white dark:bg-gray-800 rounded-lg p-3 border h-[145px] flex flex-col justify-between ${
+                                        snapshot.isDragging
+                                          ? 'border-blue-400 dark:border-blue-500 shadow-lg'
+                                          : 'border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md'
+                                      } cursor-pointer`}
                                     >
-                                      <div 
-                                        {...provided.dragHandleProps}
-                                        className="mr-2 cursor-grab text-gray-400"
-                                      >
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                          <path d="M7 8h10M7 12h10M7 16h10" />
-                                        </svg>
-                                      </div>
-                                      
-                                      <div className="flex items-center space-x-3 flex-1">
-                                        <div className={`w-3 h-3 rounded-full ${getColorClass(stage.color)}`}></div>
-                                        
-                                        <input
-                                          type="text"
-                                          value={stage.name}
-                                          onChange={(e) => handleStageNameChange(stage.id, e.target.value)}
-                                          className="flex-1 border-0 focus:ring-0 p-0 text-sm bg-transparent focus:outline-none text-gray-700 dark:text-gray-300"
-                                        />
-                                        
-                                        <select
-                                          value={stage.color}
-                                          onChange={(e) => handleStageColorChange(stage.id, e.target.value)}
-                                          className="text-xs border-0 bg-transparent focus:ring-0 p-0 text-gray-500 dark:text-gray-400"
+                                      {/* Group logo and name */}
+                                      <div className="flex items-center mb-2 px-0.5">
+                                        <GroupLogo name={card.company} />
+                                        <div 
+                                          className="company-name ml-2 text-[14px] font-medium text-indigo-600 dark:text-indigo-400 truncate" 
+                                          style={{marginLeft: '4px !important', color: 'rgb(79, 70, 229) !important'}}
                                         >
-                                          <option value="blue">Blue</option>
-                                          <option value="indigo">Indigo</option>
-                                          <option value="purple">Purple</option>
-                                          <option value="green">Green</option>
-                                          <option value="gray">Gray</option>
-                                        </select>
+                                          {card.company}
+                                        </div>
+                                      </div>
+
+                                      {/* Tags - limited to 2 with "..." */}
+                                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-2 px-0.5">
+                                        {card.tags.length > 0 ? (
+                                          <div className="flex flex-wrap gap-1">
+                                            {card.tags.slice(0, 2).map((tag, i) => {
+                                              let bgColor = 'bg-gray-100 dark:bg-gray-700';
+                                              let textColor = 'text-gray-600 dark:text-gray-300';
+                                              let borderColor = 'border border-gray-200 dark:border-gray-600';
+                                              
+                                              if (tag === 'Wifey material') {
+                                                bgColor = 'bg-green-50 dark:bg-green-900/30';
+                                                textColor = 'text-green-700 dark:text-green-300';
+                                                borderColor = 'border border-green-200 dark:border-green-800';
+                                              } else if (tag === 'ENOC') {
+                                                bgColor = 'bg-orange-50 dark:bg-orange-900/30';
+                                                textColor = 'text-orange-700 dark:text-orange-300';
+                                                borderColor = 'border border-orange-200 dark:border-orange-800';
+                                              } else if (tag === 'From conference') {
+                                                bgColor = 'bg-blue-50 dark:bg-blue-900/30';
+                                                textColor = 'text-blue-700 dark:text-blue-300';
+                                                borderColor = 'border border-blue-200 dark:border-blue-800';
+                                              } else if (tag === 'No money') {
+                                                bgColor = 'bg-red-50 dark:bg-red-900/30';
+                                                textColor = 'text-red-700 dark:text-red-300';
+                                                borderColor = 'border border-red-200 dark:border-red-800';
+                                              } else if (tag === 'Crypto') {
+                                                bgColor = 'bg-purple-50 dark:bg-purple-900/30';
+                                                textColor = 'text-purple-700 dark:text-purple-300';
+                                                borderColor = 'border border-purple-200 dark:border-purple-800';
+                                              }
+                                              
+                                              return (
+                                                <span key={i} className={`inline-block ${bgColor} ${textColor} ${borderColor} rounded-full px-2 py-0.5 text-[10px] mr-1`}>
+                                                  {tag}
+                                                </span>
+                                              );
+                                            })}
+                                            {card.tags.length > 2 && (
+                                              <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-full px-2 py-0.5 text-[10px]">
+                                                ...
+                                              </span>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          'No tags'
+                                        )}
+                                      </div>
+
+                                      {/* Group owner */}
+                                      <div className="flex items-center mb-2 px-0.5">
+                                        <div className="flex items-center text-xs">
+                                          <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white text-[10px] mr-1.5 flex-shrink-0">
+                                            {card.contact ? card.contact.charAt(0) : '?'}
+                                          </div>
+                                          <span className="text-gray-700 dark:text-gray-300 truncate max-w-[160px] text-xs">
+                                            {card.contact}
+                                          </span>
+                                        </div>
+                                        
+                                        {/* Priority indicator */}
+                                        <div className="ml-auto">
+                                          <span className={`text-[10px] py-0.5 px-1.5 rounded-full ${
+                                            card.id.includes('1') || card.id.includes('5') ? 
+                                              'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 
+                                            card.id.includes('3') || card.id.includes('6') ? 
+                                              'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' : 
+                                              'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                                          }`}>
+                                            {card.id.includes('1') || card.id.includes('5') ? 'High' : 
+                                             card.id.includes('3') || card.id.includes('6') ? 'Medium' : 'Low'}
+                                          </span>
+                                        </div>
                                       </div>
                                       
-                                      <button
-                                        onClick={() => handleDeleteStage(stage.id)}
-                                        className="text-gray-400 hover:text-red-500"
-                                      >
-                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                          <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                      </button>
+                                      {/* Divider */}
+                                      <div className="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                                      
+                                      {/* Tasks status */}
+                                      <div className="flex items-center justify-between text-xs px-0.5 mt-1 mb-1">
+                                        <div className="flex items-center text-gray-600 dark:text-gray-400">
+                                          {card.status ? (
+                                            <>
+                                              {card.status === 'Invoice paid' ? (
+                                                <CheckIcon className="w-3 h-3 mr-1 text-green-500" />
+                                              ) : card.status === 'Invoice sent' ? (
+                                                <MessageIcon className="w-3 h-3 mr-1 text-blue-500" />
+                                              ) : card.status === 'Offline meeting' ? (
+                                                <TeamIcon className="w-3 h-3 mr-1 text-purple-500" />
+                                              ) : null}
+                                              <span className="text-[11px]">{card.status}</span>
+                                            </>
+                                          ) : (
+                                            <span className="text-green-600 dark:text-green-400 text-[11px]">No tasks pending</span>
+                                          )}
+                                        </div>
+                                        
+                                        {card.messages > 0 ? (
+                                          <span className={`text-[10px] flex items-center justify-center w-5 h-5 ${
+                                            card.id.includes('1') || card.id.includes('5') 
+                                              ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' // Hot
+                                              : card.id.includes('3') || card.id.includes('4')  
+                                                ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200' // Warm
+                                                : card.id.includes('6')
+                                                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' // Cold
+                                                  : 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200' // Dormant
+                                          } rounded-full flex-shrink-0 relative group`}>
+                                            {card.messages}
+                                            <div className="absolute bottom-full right-0 mb-2 w-32 bg-gray-900 text-white text-xs rounded-md py-1 px-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
+                                              {card.id.includes('1') || card.id.includes('5') 
+                                                ? 'Hot Lead' 
+                                                : card.id.includes('3') || card.id.includes('4')
+                                                  ? 'Warm Lead'
+                                                  : card.id.includes('6')
+                                                    ? 'Cold Lead'
+                                                    : 'Dormant Lead'
+                                              }
+                                            </div>
+                                          </span>
+                                        ) : (
+                                          <div className={`w-2 h-2 rounded-full flex-shrink-0 relative group ${
+                                            card.id.includes('1') || card.id.includes('5') 
+                                              ? 'bg-red-500' // Hot
+                                              : card.id.includes('3') || card.id.includes('4')  
+                                                ? 'bg-orange-500' // Warm
+                                                : card.id.includes('6')
+                                                  ? 'bg-blue-500' // Cold
+                                                  : 'bg-gray-500' // Dormant
+                                          }`}>
+                                            <div className="absolute bottom-full right-0 mb-2 w-32 bg-gray-900 text-white text-xs rounded-md py-1 px-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-50">
+                                              {card.id.includes('1') || card.id.includes('5') 
+                                                ? 'Hot Lead' 
+                                                : card.id.includes('3') || card.id.includes('4')
+                                                  ? 'Warm Lead'
+                                                  : card.id.includes('6')
+                                                    ? 'Cold Lead'
+                                                    : 'Dormant Lead'
+                                              }
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
                                     </div>
                                   )}
                                 </Draggable>
                               ))}
                               {provided.placeholder}
+                              <button className="add-card-button w-full h-[40px] p-2 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all hover:border-blue-300 dark:hover:border-blue-700 hover:text-blue-600 dark:hover:text-blue-400 flex items-center justify-center mt-2">
+                                <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Add Deal
+                              </button>
                             </div>
                           )}
                         </Droppable>
-                      </DragDropContext>
-                      
-                      <div className="bg-gray-50 dark:bg-gray-900 p-4 flex items-center">
-                        <input
-                          type="text"
-                          placeholder="Add stage"
-                          value={newStageName}
-                          onChange={(e) => setNewStageName(e.target.value)}
-                          className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                        />
-                        <button
-                          onClick={handleAddStage}
-                          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-1.5 rounded-r-md transition-colors"
-                        >
-                          Add stage
-                        </button>
                       </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </DragDropContext>
+          </div>
+        ) : (
+          <div className="flex-1 pl-[1px] pt-[1px]">
+            <table className="min-w-full flex-1 border-collapse bg-white dark:bg-gray-800 h-full w-full rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm border-l-4 border-l-blue-500 dark:border-l-blue-600">
+              <thead className="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Deal
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Stage
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Owner
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Priority
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Value
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b-0">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-gray-800">
+                {columnOrder.flatMap((columnId, columnIndex, columnsArray) => 
+                  columns[columnId].cards.map((card, rowIndex, rowsArray) => {
+                    // Calculate if this is the last row in the entire table
+                    const isLastColumn = columnIndex === columnOrder.length - 1;
+                    const isLastRowInColumn = rowIndex === columns[columnId].cards.length - 1;
+                    const isLastRowInTable = isLastColumn && isLastRowInColumn;
+                    
+                    return (
+                      <tr 
+                        key={card.id} 
+                        onClick={() => handleCardClick(card.id)} 
+                        className="hover:bg-gray-50 dark:hover:bg-gray-300/[0.025] cursor-pointer relative"
+                        style={{
+                          borderBottom: !isLastRowInTable ? '1px solid var(--border-color, #e5e7eb)' : 'none'
+                        }}
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex flex-col space-y-2">
+                            <div className="flex items-center">
+                              <GroupLogo name={card.company} />
+                              <div className="ml-2 text-sm font-medium text-gray-900 dark:text-white">{card.company}</div>
+                            </div>
+                            <div className="flex flex-wrap">
+                              {card.tags.slice(0, 2).map((tag, i) => {
+                                let bgColor = 'bg-gray-100 dark:bg-gray-700';
+                                let textColor = 'text-gray-600 dark:text-gray-300';
+                                let borderColor = 'border border-gray-200 dark:border-gray-600';
+                                
+                                if (tag === 'Wifey material') {
+                                  bgColor = 'bg-green-50 dark:bg-green-900/30';
+                                  textColor = 'text-green-700 dark:text-green-300';
+                                  borderColor = 'border border-green-200 dark:border-green-800';
+                                } else if (tag === 'ENOC') {
+                                  bgColor = 'bg-orange-50 dark:bg-orange-900/30';
+                                  textColor = 'text-orange-700 dark:text-orange-300';
+                                  borderColor = 'border border-orange-200 dark:border-orange-800';
+                                } else if (tag === 'From conference') {
+                                  bgColor = 'bg-blue-50 dark:bg-blue-900/30';
+                                  textColor = 'text-blue-700 dark:text-blue-300';
+                                  borderColor = 'border border-blue-200 dark:border-blue-800';
+                                } else if (tag === 'No money') {
+                                  bgColor = 'bg-red-50 dark:bg-red-900/30';
+                                  textColor = 'text-red-700 dark:text-red-300';
+                                  borderColor = 'border border-red-200 dark:border-red-800';
+                                } else if (tag === 'Crypto') {
+                                  bgColor = 'bg-purple-50 dark:bg-purple-900/30';
+                                  textColor = 'text-purple-700 dark:text-purple-300';
+                                  borderColor = 'border border-purple-200 dark:border-purple-800';
+                                }
+                                
+                                return (
+                                  <span key={i} className={`inline-block ${bgColor} ${textColor} ${borderColor} rounded-full px-2 py-0.5 text-[10px] mr-1`}>
+                                    {tag}
+                                  </span>
+                                );
+                              })}
+                              {card.tags.length > 2 && (
+                                <span className="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-full px-2 py-0.5 text-[10px]">
+                                  +{card.tags.length - 2}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className={`w-3 h-3 rounded-full mr-2 ${getColorClass(columns[columnId].color)}`}></div>
+                            <span className="text-sm text-gray-900 dark:text-white">{columns[columnId].title}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 flex items-center justify-center text-white text-xs mr-2">
+                              {card.contact.charAt(0)}
+                            </div>
+                            <span className="text-sm text-gray-900 dark:text-white">{card.contact}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`inline-flex text-xs px-2 py-1 rounded-full ${
+                            card.id.includes('1') || card.id.includes('5') ? 
+                              'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' : 
+                            card.id.includes('3') || card.id.includes('6') ? 
+                              'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' : 
+                              'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                          }`}>
+                            {card.id.includes('1') || card.id.includes('5') ? 'High' : 
+                             card.id.includes('3') || card.id.includes('6') ? 'Medium' : 'Low'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                          ${card.value.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {card.status ? (
+                              <span className="text-sm text-gray-700 dark:text-gray-300">{card.status}</span>
+                            ) : (
+                              <span className="text-sm text-green-600 dark:text-green-400">No tasks pending</span>
+                            )}
+                            <div className="ml-2">
+                              {card.messages > 0 ? (
+                                <span className={`text-[10px] flex items-center justify-center w-5 h-5 ${
+                                  card.id.includes('1') || card.id.includes('5') 
+                                    ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' // Hot
+                                    : card.id.includes('3') || card.id.includes('4')  
+                                      ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200' // Warm
+                                      : card.id.includes('6')
+                                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' // Cold
+                                        : 'bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200' // Dormant
+                                } rounded-full flex-shrink-0 relative group`}>
+                                  {card.messages}
+                                </span>
+                              ) : (
+                                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                                  card.id.includes('1') || card.id.includes('5') 
+                                    ? 'bg-red-500' // Hot
+                                    : card.id.includes('3') || card.id.includes('4')  
+                                      ? 'bg-orange-500' // Warm
+                                      : card.id.includes('6')
+                                        ? 'bg-blue-500' // Cold
+                                        : 'bg-gray-500' // Dormant
+                                }`}></div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* Pipeline Editor Modal */}
+        {showPipelineEditor && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-gray-800 rounded-lg w-full max-w-2xl shadow-xl">
+              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Pipeline</h2>
+                <button 
+                  onClick={handleCloseEditor}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="p-4">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Pipeline Name
+                  </label>
+                  <input
+                    type="text"
+                    value={editingPipelineName}
+                    onChange={handlePipelineNameChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Pipeline Stages
+                  </label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    Add up to 10 stages in your pipeline
+                  </p>
+                  
+                  <div className="border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                    <div className="bg-gray-50 dark:bg-gray-900 px-4 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 uppercase">
+                      Stages
+                    </div>
+                    
+                    <DragDropContext onDragEnd={handleStageReorder}>
+                      <Droppable droppableId="stages" type="STAGE">
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className="divide-y divide-gray-200 dark:divide-gray-700"
+                          >
+                            {editingStages.map((stage, index) => (
+                              <Draggable key={stage.id} draggableId={stage.id} index={index}>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    className="flex items-center px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750"
+                                  >
+                                    <div 
+                                      {...provided.dragHandleProps}
+                                      className="mr-2 cursor-grab text-gray-400"
+                                    >
+                                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M7 8h10M7 12h10M7 16h10" />
+                                      </svg>
+                                    </div>
+                                    
+                                    <div className="flex items-center space-x-3 flex-1">
+                                      <div className={`w-3 h-3 rounded-full ${getColorClass(stage.color)}`}></div>
+                                      
+                                      <input
+                                        type="text"
+                                        value={stage.name}
+                                        onChange={(e) => handleStageNameChange(stage.id, e.target.value)}
+                                        className="flex-1 border-0 focus:ring-0 p-0 text-sm bg-transparent focus:outline-none text-gray-700 dark:text-gray-300"
+                                      />
+                                      
+                                      <select
+                                        value={stage.color}
+                                        onChange={(e) => handleStageColorChange(stage.id, e.target.value)}
+                                        className="text-xs border-0 bg-transparent focus:ring-0 p-0 text-gray-500 dark:text-gray-400"
+                                      >
+                                        <option value="blue">Blue</option>
+                                        <option value="indigo">Indigo</option>
+                                        <option value="purple">Purple</option>
+                                        <option value="green">Green</option>
+                                        <option value="gray">Gray</option>
+                                      </select>
+                                    </div>
+                                    
+                                    <button
+                                      onClick={() => handleDeleteStage(stage.id)}
+                                      className="text-gray-400 hover:text-red-500"
+                                    >
+                                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                    
+                    <div className="bg-gray-50 dark:bg-gray-900 p-4 flex items-center">
+                      <input
+                        type="text"
+                        placeholder="Add stage"
+                        value={newStageName}
+                        onChange={(e) => setNewStageName(e.target.value)}
+                        className="flex-1 border border-gray-300 dark:border-gray-600 rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                      />
+                      <button
+                        onClick={handleAddStage}
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-3 py-1.5 rounded-r-md transition-colors"
+                      >
+                        Add stage
+                      </button>
                     </div>
                   </div>
                 </div>
-                
-                <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700 space-x-3">
-                  <button
-                    onClick={handleCloseEditor}
-                    className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleSavePipeline}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
-                  >
-                    Save changes
-                  </button>
-                </div>
+              </div>
+              
+              <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700 space-x-3">
+                <button
+                  onClick={handleCloseEditor}
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSavePipeline}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
+                >
+                  Save changes
+                </button>
               </div>
             </div>
-          )}
-        </div>
-      </AppLayout>
+          </div>
+        )}
+      </div>
+    </AppLayout>
       
       {/* Chat Sync Modal */}
       <ChatSyncModal

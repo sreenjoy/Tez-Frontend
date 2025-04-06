@@ -620,16 +620,16 @@ export default function DashboardPage() {
               </div>
             </div>
             <LineChart data={chatVolumeData} options={chatVolumeOptions} />
-          </div>
+                  </div>
           
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Deal Distribution</h2>
               <div className="text-sm text-gray-500 dark:text-gray-400">By stage</div>
-            </div>
+                    </div>
             <PieChart data={dealDistributionData} options={dealDistributionOptions} />
-          </div>
-        </div>
+                  </div>
+                </div>
         
         {/* Pipeline activity and response metrics */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -858,4 +858,4 @@ export default function DashboardPage() {
       </div>
     </AppLayout>
   )
-}
+} 
