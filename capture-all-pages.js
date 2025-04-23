@@ -2,6 +2,7 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 // Ensure directories exist
 const makeDir = (dirPath) => {
@@ -12,6 +13,46 @@ const makeDir = (dirPath) => {
 
 const BASE_URL = 'http://localhost:3010';
 const SCREENSHOT_DIR = path.join('documentation', 'screenshots');
+
+// Function to check if development server is running
+function isServerRunning() {
+  try {
+    const result = execSync('lsof -i:3010').toString();
+    return result.length > 0;
+  } catch (error) {
+    return false;
+  }
+}
+
+// Function to start development server
+async function startDevServer() {
+  if (!isServerRunning()) {
+    console.log('Starting development server...');
+    const serverProcess = require('child_process').spawn('npm', ['run', 'dev'], {
+      detached: true,
+      stdio: 'ignore'
+    });
+    serverProcess.unref();
+    
+    // Wait for server to start
+    console.log('Waiting for server to start...');
+    let retries = 0;
+    while (!isServerRunning() && retries < 30) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      retries++;
+    }
+    
+    if (retries >= 30) {
+      throw new Error('Failed to start development server within 30 seconds');
+    }
+    
+    // Extra wait to ensure server is fully ready
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log('Development server started');
+  } else {
+    console.log('Development server is already running');
+  }
+}
 
 const pages = [
   { name: 'dashboard', path: '/dashboard', variants: ['light', 'dark'] },
@@ -70,7 +111,7 @@ const pageElements = {
 // Function to capture page screenshots
 async function captureScreenshots() {
   const browser = await puppeteer.launch({
-    headless: false, // Set to true for production
+    headless: 'new', // Use headless mode for production
     defaultViewport: { width: 1920, height: 1080 },
     args: ['--start-maximized']
   });
@@ -89,51 +130,66 @@ async function captureScreenshots() {
       makeDir(pageDir);
       
       for (const variant of variants) {
-        console.log(`Capturing ${name} page (${variant} mode)...`);
-        
-        await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'networkidle2' });
-        
-        // Set theme
-        if (variant === 'dark') {
-          await page.evaluate(() => {
-            localStorage.setItem('theme', 'dark');
-            document.documentElement.classList.add('dark');
+        try {
+          console.log(`Capturing ${name} page (${variant} mode)...`);
+          
+          await page.goto(`${BASE_URL}${pagePath}`, { 
+            waitUntil: 'networkidle2',
+            timeout: 30000 
           });
-          // Refresh to apply dark theme
-          await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'networkidle2' });
-        } else {
-          await page.evaluate(() => {
-            localStorage.setItem('theme', 'light');
-            document.documentElement.classList.remove('dark');
-          });
-          // Refresh to apply light theme
-          await page.goto(`${BASE_URL}${pagePath}`, { waitUntil: 'networkidle2' });
-        }
-        
-        // Wait for content to load
-        await page.waitForTimeout(1000);
-        
-        // Take full page screenshot
-        await page.screenshot({
-          path: `${pageDir}/${name}-full-${variant}.png`,
-          fullPage: true
-        });
-        
-        // Capture specific elements if defined for this page
-        const elements = pageElements[name] || [];
-        for (const element of elements) {
-          try {
-            const elementHandle = await page.$(element.selector);
-            if (elementHandle) {
-              await elementHandle.screenshot({
-                path: `${pageDir}/${name}-${element.name}-${variant}.png`
-              });
-            } else {
-              console.warn(`Element "${element.name}" not found on ${name} page.`);
-            }
-          } catch (error) {
-            console.error(`Error capturing ${element.name} on ${name} page:`, error);
+          
+          // Set theme
+          if (variant === 'dark') {
+            await page.evaluate(() => {
+              localStorage.setItem('theme', 'dark');
+              document.documentElement.classList.add('dark');
+            });
+            // Refresh to apply dark theme
+            await page.goto(`${BASE_URL}${pagePath}`, { 
+              waitUntil: 'networkidle2',
+              timeout: 30000
+            });
+          } else {
+            await page.evaluate(() => {
+              localStorage.setItem('theme', 'light');
+              document.documentElement.classList.remove('dark');
+            });
+            // Refresh to apply light theme
+            await page.goto(`${BASE_URL}${pagePath}`, { 
+              waitUntil: 'networkidle2',
+              timeout: 30000
+            });
           }
+          
+          // Wait for content to load
+          await page.waitForTimeout(2000);
+          
+          // Take full page screenshot
+          await page.screenshot({
+            path: `${pageDir}/${name}-full-${variant}.png`,
+            fullPage: true
+          });
+          
+          // Capture specific elements if defined for this page
+          const elements = pageElements[name] || [];
+          for (const element of elements) {
+            try {
+              const elementHandle = await page.$(element.selector);
+              if (elementHandle) {
+                await elementHandle.screenshot({
+                  path: `${pageDir}/${name}-${element.name}-${variant}.png`
+                });
+              } else {
+                console.warn(`Element "${element.name}" not found on ${name} page.`);
+              }
+            } catch (error) {
+              console.error(`Error capturing ${element.name} on ${name} page:`, error);
+            }
+          }
+        } catch (error) {
+          console.error(`Error capturing ${name} page:`, error);
+          // Create an empty file to indicate the page was attempted
+          fs.writeFileSync(`${pageDir}/${name}-full-${variant}.png`, '');
         }
       }
     }
@@ -146,42 +202,60 @@ async function captureScreenshots() {
 
 // Create documentation markdown for each page
 async function generateDocumentation() {
+  makeDir(path.join('documentation', 'pages'));
+  
   for (const pageInfo of pages) {
     const { name } = pageInfo;
+    const pageDir = path.join(SCREENSHOT_DIR, name);
     const pageDocsPath = path.join('documentation', 'pages', `${name}.md`);
-    const screenshots = fs.readdirSync(path.join(SCREENSHOT_DIR, name))
-      .filter(file => file.endsWith('.png'));
+    
+    // Ensure the screenshots directory exists before trying to read it
+    makeDir(pageDir);
+    
+    let screenshots = [];
+    try {
+      screenshots = fs.readdirSync(pageDir)
+        .filter(file => file.endsWith('.png'));
+    } catch (error) {
+      console.error(`Error reading screenshot directory for ${name}:`, error);
+      screenshots = [];
+    }
     
     let content = `# ${name.charAt(0).toUpperCase() + name.slice(1)} Page Documentation\n\n`;
     content += `## Overview\n\nThe ${name} page provides users with ${getPageDescription(name)}.\n\n`;
-    content += `## Screenshots\n\n`;
     
-    // Add full page screenshots first
-    const fullScreenshots = screenshots.filter(file => file.includes('-full-'));
-    for (const screenshot of fullScreenshots) {
-      const mode = screenshot.includes('-full-dark') ? 'Dark Mode' : 'Light Mode';
-      content += `### Full Page (${mode})\n\n`;
-      content += `![${name} page - ${mode}](../screenshots/${name}/${screenshot})\n\n`;
-    }
-    
-    // Add component screenshots
-    const componentScreenshots = screenshots.filter(file => !file.includes('-full-'));
-    if (componentScreenshots.length > 0) {
-      content += `## Components\n\n`;
+    if (screenshots.length > 0) {
+      content += `## Screenshots\n\n`;
       
-      for (const screenshot of componentScreenshots) {
-        const componentName = screenshot
-          .replace(`${name}-`, '')
-          .replace(/-dark\.png$/, '')
-          .replace(/-light\.png$/, '')
-          .split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
-        
-        const mode = screenshot.includes('-dark.png') ? 'Dark Mode' : 'Light Mode';
-        content += `### ${componentName} (${mode})\n\n`;
-        content += `![${componentName}](../screenshots/${name}/${screenshot})\n\n`;
+      // Add full page screenshots first
+      const fullScreenshots = screenshots.filter(file => file.includes('-full-'));
+      for (const screenshot of fullScreenshots) {
+        const mode = screenshot.includes('-full-dark') ? 'Dark Mode' : 'Light Mode';
+        content += `### Full Page (${mode})\n\n`;
+        content += `![${name} page - ${mode}](../screenshots/${name}/${screenshot})\n\n`;
       }
+      
+      // Add component screenshots
+      const componentScreenshots = screenshots.filter(file => !file.includes('-full-'));
+      if (componentScreenshots.length > 0) {
+        content += `## Components\n\n`;
+        
+        for (const screenshot of componentScreenshots) {
+          const componentName = screenshot
+            .replace(`${name}-`, '')
+            .replace(/-dark\.png$/, '')
+            .replace(/-light\.png$/, '')
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          
+          const mode = screenshot.includes('-dark.png') ? 'Dark Mode' : 'Light Mode';
+          content += `### ${componentName} (${mode})\n\n`;
+          content += `![${componentName}](../screenshots/${name}/${screenshot})\n\n`;
+        }
+      }
+    } else {
+      content += `## Screenshots\n\n*Screenshots could not be generated for this page.*\n\n`;
     }
     
     // Add usage documentation
@@ -273,13 +347,32 @@ function getUsageGuide(pageName) {
 
 // Run the screenshot and documentation generation
 async function run() {
+  // Create directories
   makeDir(SCREENSHOT_DIR);
   makeDir(path.join('documentation', 'pages'));
   
-  await captureScreenshots();
-  await generateDocumentation();
-  
-  console.log('All screenshots and documentation have been generated!');
+  try {
+    // Start or verify development server is running
+    await startDevServer();
+    
+    // Capture screenshots
+    await captureScreenshots();
+    
+    // Generate documentation
+    await generateDocumentation();
+    
+    console.log('All screenshots and documentation have been generated!');
+  } catch (error) {
+    console.error('Error running documentation generation:', error);
+    
+    // Still generate documentation even if screenshots fail
+    try {
+      await generateDocumentation();
+      console.log('Documentation generated (without screenshots).');
+    } catch (docError) {
+      console.error('Error generating documentation:', docError);
+    }
+  }
 }
 
 run(); 
