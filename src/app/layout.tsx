@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 // Metadata for the application
 export const metadata: Metadata = {
-  title: 'Tez Social',
-  description: 'Streamline your Telegram business communication',
+  title: 'frib.ai | AI-Powered Sales CRM',
+  description: 'Simplify your sales process with AI-powered insights, intelligent pipeline management, and automated deal tracking.',
 }
 
 // Root layout component that wraps all pages
