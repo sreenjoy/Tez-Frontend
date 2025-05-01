@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { ScreenshotWrapper } from '../components/ScreenshotWrapper';
 
 export default function Home() {
   return (
@@ -54,13 +55,11 @@ export default function Home() {
           </div>
           <div className="md:w-1/2 mt-12 md:mt-0">
             <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden border border-gray-700 shadow-2xl">
-              {/* Full Pipeline Screenshot */}
+              {/* Pipeline Screenshot */}
               <div className="absolute inset-0 bg-slate-800">
-                <img 
-                  src="/images/pipeline-screenshot.png" 
-                  alt="Pipeline Management Interface" 
-                  className="object-cover w-full h-full"
-                  style={{ objectPosition: 'top' }}
+                <ScreenshotWrapper 
+                  imageURL="/pipeline" 
+                  fallbackText="Pipeline Management Interface"
                 />
               </div>
             </div>
@@ -190,10 +189,11 @@ export default function Home() {
             </div>
             <div className="md:w-1/2">
               <div className="bg-slate-800 rounded-xl p-3 shadow-xl border border-slate-700 overflow-hidden">
-                <img 
-                  src="/images/dashboard-screenshot.png" 
-                  alt="Dashboard Interface" 
-                  className="rounded-lg w-full"
+                <ScreenshotWrapper 
+                  imageURL="/dashboard" 
+                  fallbackText="Dashboard Interface"
+                  height="300px"
+                  rounded="lg"
                 />
               </div>
             </div>
@@ -308,11 +308,13 @@ export default function Home() {
             </p>
           </div>
 
-          <img 
-            src="/images/full-pipeline-screenshot.png" 
-            alt="Full Pipeline Management Interface" 
-            className="rounded-xl w-full shadow-2xl border border-slate-700"
-          />
+          <div className="w-full h-[500px] bg-slate-800 rounded-xl shadow-2xl border border-slate-700 overflow-hidden">
+            <ScreenshotWrapper 
+              imageURL="/pipeline" 
+              fallbackText="Pipeline Management Interface"
+              height="500px"
+            />
+          </div>
         </div>
       </section>
 
