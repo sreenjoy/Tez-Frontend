@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Screenshot Downloader</title>
+  <script>
+    function downloadImage(imageUrl, filename) {
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</head>
+<body>
+  <h1>Screenshot Downloader</h1>
+  <button onclick="downloadImage('https://i.imgur.com/l78sRpG.png', 'dashboard-screenshot.png')">
+    Download Dashboard Screenshot
+  </button>
+  <br><br>
+  <button onclick="downloadImage('https://i.imgur.com/XmDdBSX.png', 'pipeline-screenshot.png')">
+    Download Pipeline Screenshot
+  </button>
+  <br><br>
+  <button onclick="downloadImage('https://i.imgur.com/XmDdBSX.png', 'full-pipeline-screenshot.png')">
+    Download Full Pipeline Screenshot
+  </button>
+</body>
+</html> 
