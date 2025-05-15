@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   output: 'standalone',
   transpilePackages: ['react-chartjs-2', 'chart.js'],
   experimental: {
