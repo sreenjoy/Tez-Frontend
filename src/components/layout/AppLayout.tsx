@@ -122,6 +122,21 @@ const Tooltip = ({ text, stats, visible, className = "" }) => {
   );
 };
 
+const MessageSchedulerIcon = ({ className = "w-5 h-5" }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8 10h.01" />
+    <path d="M12 10h.01" />
+    <path d="M16 10h.01" />
+    <path d="M8 14h.01" />
+    <path d="M12 14h.01" />
+    <path d="M16 14h.01" />
+    <rect x="2" y="3" width="20" height="18" rx="2" />
+    <path d="M8 2v2" />
+    <path d="M16 2v2" />
+    <path d="M2 8h20" />
+  </svg>
+)
+
 // Sidebar navigation items
 const navigationItems = [
   { 
@@ -151,6 +166,13 @@ const navigationItems = [
     href: '/inbox',
     description: 'View and respond to messages',
     stats: '5 unread messages'
+  },
+  { 
+    name: 'Message Scheduler', 
+    icon: MessageSchedulerIcon, 
+    href: '/message-scheduler',
+    description: 'Schedule bulk messages to Telegram contacts',
+    stats: '2 scheduled campaigns'
   },
   { 
     name: 'Tasks', 
